@@ -1,0 +1,169 @@
+<!--Saved by Quest 5.7.6404.15496-->
+<asl version="550">
+  <include ref="English.aslx" />
+  <include ref="Core.aslx" />
+  <include ref="group_project_library.aslx" />
+  <game name="group_project">
+    <gameid>c76a1ed4-9935-44c1-97e7-b7857e268d49</gameid>
+    <version>0.1</version>
+    <firstpublished>2017</firstpublished>
+    <feature_advancedscripts />
+    <description><![CDATA[This is the template for the group project. Your zone starts with the room "gateway". You can do what you like with that room, it belongs to you - but you must give it a new name. And do not touch the _initialise_ attribute.<br/><br/>All rooms, objects, exits (if you name them), commands (if you name them) and functions you add to the game must have a name that starts with your initials (or other two letter identifier), and that includes the new name for gateway. This is to ensure there are no conflicts. If two people have a room called gateway in their zone, we will have problems when we put it together.<br/><br/>Commands and verb elements will generally be better submitted to the library. Functions might too if others will use them.<br/><br/>To allow the player to travel back to the hub, give a room a Boolean attribute called "gateway" and set it to true. This is already done for the gateway room. Use the TRAVEL command to travel to and from the hub.<br/><br/>To add an item to another creator's zone (or an NPC or, if using ConvLib, a conversation topic), put the object in a room your game (not in the hub, it will get deleted, but you might want to have a room dedicated to this purpose). Go to its "Features" tab, and tick "Run an initialisation script". Go to the "Initialisation script", tab and paste in this script.<br/><br/>    StartMeElsewhere(this, "px_academy_great_hall")<br/><br/>Change the room name as appropiate. When the game starts, if this room exists, then item will get moved there. Otherwise it will get moved to the hub, where you can find it while testing (not going to work for topics admittedly).<br/><br/>Use the Combined function to test in game if this is the final version or just your bit.<br/><br/>    if (Combined()) msg("This is the full version!")<br/><br/>NOTE: Any changes you make to game, hub, or player will be lost (as well as any objects or commands or exits inside them) when you game is combined with everything else.<br/><br/>NOTE: The library may be updated periodically, and that may well affect the hub and player, but should not affect your zone.]]></description>
+    <showpanes type="boolean">false</showpanes>
+    <classiclocation type="boolean">false</classiclocation>
+    <attr name="autodescription_youarein_useprefix" type="boolean">false</attr>
+    <customlocationcolour>Black</customlocationcolour>
+    <customlocationtextcolour>White</customlocationtextcolour>
+    <feature_asktell />
+    <feature_annotations />
+    <showscore type="boolean">false</showscore>
+    <showhealth type="boolean">false</showhealth>
+    <showmoney type="boolean">false</showmoney>
+    <enablehyperlinks type="boolean">false</enablehyperlinks>
+    <start type="script"><![CDATA[
+      StartScript
+      if (Combined()) {
+        msg ("This is the full version!")
+      }
+      else {
+        msg ("<br/>(This is not the full version!)<br/>")
+      }
+    ]]></start>
+  </game>
+  <object name="hub">
+    <inherit name="editor_room" />
+    <attr name="feature_startscript" type="boolean">false</attr>
+    <description><![CDATA[<br/>(Enter TRAVEL to choose a destination.)<br/>]]></description>
+    <enter type="script">
+      HubEnterScript
+    </enter>
+    <destinations type="objectlist"></destinations>
+    <object name="player">
+      <inherit name="editor_object" />
+      <inherit name="editor_player" />
+      <isfemale type="boolean">false</isfemale>
+      <race>human</race>
+      <RH_carrying_on_dimension_exit type="stringlist" />
+      <attr name="pov_look" type="script">
+        DescribePlayer
+      </attr>
+    </object>
+    <command name="TravelFromHub">
+      <pattern>travel</pattern>
+      <script>
+        ShowMenu ("Travel to where?", hub.destinations, true) {
+          msg (TravelToHub.travelmsg)
+          player.parent = GetObject(result)
+        }
+        // TODO Add script to search through objects carried by the player, and add the RH_carrying_on_dimension_exit Boolean to each
+      </script>
+    </command>
+  </object>
+  <object name="RH_gateway">
+    <attr name="feature_startscript" type="boolean">false</attr>
+    <gateway />
+    <alias>Richard Headkid's Lair (this name is a placeholder)</alias>
+    <description><![CDATA[<br/>This is the gateway between my game world and the main hub.<br/><br/>(I'd like to see someone else's hub description, and try to make mine similar.)<br/><br/>You can TRAVEL to a hub or enter this world to the NORTH.]]></description>
+    <attr name="_initialise_" type="script">
+      AddToHubGateway (this)
+    </attr>
+    <exit alias="north" to="RH_First_test_room">
+      <inherit name="northdirection" />
+    </exit>
+  </object>
+  <verb>
+    <property>usephone</property>
+    <pattern>use phone;use phonebooth;use booth;use phone booth</pattern>
+    <defaultexpression>"You can't use phone;use phonebooth;use booth;use phone booth " + object.article + "."</defaultexpression>
+  </verb>
+  <object name="RH_First_test_room">
+    <inherit name="editor_room" />
+    <alias>Dirt Farm</alias>
+    <description><![CDATA[<br/>The landscape consists solely of dirt, as far as the eye can see in any given direction.<br/>]]></description>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <object name="RH_dirt_farmer">
+      <inherit name="editor_object" />
+      <inherit name="namedmale" />
+      <alias>Dirt Farmer</alias>
+      <look><![CDATA[He is donning some raggedy overalls, which are, of course, covered in dirt. {if RH_hoe.parent=RH_dirt_farmer:<br/><br/>He's also wielding a hoe.}]]></look>
+      <usedefaultprefix />
+      <speak type="script">
+        msg ("\"Heya, there!\" booms the farmer. \"I know about hoes, but that's pretty much it!\"")
+      </speak>
+      <ask type="scriptdictionary">
+        <item key="ho hoe hoes hos"><![CDATA[
+          if (not GetBoolean(RH_hoe, "handled")) {
+            msg ("\"Hell, I got hoes in different area codes, if ya' know what I mean!\" The dirt farmer shoots you a sly grin, giving his hoe a nice pat.<br/><br/>\"Here, take this one! I ain't got nothin' to do with it no more. Not after them corporations fouled up the whole works! Their 'techniques' rendered this whole area totally lifeless, besides me, that is.<br/><br/>\"THEN,\" he continues, \"the Mongols came through and plundered up all the food I had stored up in my barn.<br/><br/>\"Good thing that feller came by with that pouch. It'll provide a way to get some food here!\"")
+            MoveObject (RH_hoe, player)
+            SetObjectFlagOn (RH_hoe, "handled")
+          }
+          else {
+            msg ("\"Hell, I got hoes in different area codes, if ya' know what I mean!\" The dirt farmer shoots you a sly grin.")
+          }
+        ]]></item>
+        <item key="dirt">
+          msg ("\"I don't know what I could tell ya' about dirt that ya' wouldn't already know,\" shrugs the farmer.")
+        </item>
+        <item key="corporations">
+          msg ("\"They'll ruin me even worse if I tell ya' any particulars,\" says the farmer.")
+        </item>
+        <item key="mongols">
+          msg ("\"Them boys are somethin' else,\" the farmer replies. \"I couldn't tell if they was good or bad, but they sure did ME wrong, I can tell you that!\"")
+        </item>
+        <item key="food vegetation vegetables crops">
+          msg ("\"Ain't none!\" the farmer explodes. \"Between the environmentality of the situation and the Mongols, it's all gone!\"")
+        </item>
+        <item key="pouch">
+          msg ("\"Old boy, called himself 'Mister', came through here a while back,\" the farmer says, a twinkle in his eye. \"Had a pouch with him. Did somethin' to it so that everything got put into it shows up in this barn I got over the hill. Said he was goin' back before the Industrial Revolution and sendin' back some REAL food! Stuff from before all them poisons they designed for warfare started getting sprayed on our crops!\" ")
+        </item>
+        <item key="game">
+          msg ("\"I don't know yet,\" grumbles the farmer. \"This here's the first prototype I've seen, and it ain't written worth a damn!\"")
+        </item>
+        <item key="farmer him himself">
+          msg ("\"I'm alright, I reckon,\" shrugs the farmer. \"All things considered.\"")
+        </item>
+      </ask>
+    </object>
+    <object name="RH_hoe">
+      <inherit name="editor_object" />
+      <alias>hoe</alias>
+      <scenery type="boolean">false</scenery>
+      <alt type="stringlist">
+        <value>ho</value>
+      </alt>
+      <look>It's a nice-looking hoe.</look>
+      <feature_usegive />
+      <feature_startscript />
+      <use type="script">
+        msg ("You hoe around.")
+      </use>
+      <attr name="_initialise_" type="script">
+      </attr>
+      <selfuseon type="scriptdictionary">
+        <item key="RH_dirt">
+          msg ("You dig in the dirt for a bit. It makes no difference at all.")
+        </item>
+      </selfuseon>
+    </object>
+    <object name="RH_dirt">
+      <inherit name="editor_object" />
+      <scenery />
+      <look>You can't help looking at it. It's everywhere!</look>
+      <alias>dirt</alias>
+      <attr name="feature_usegive" type="boolean">false</attr>
+      <giveto type="scriptdictionary" />
+    </object>
+    <object name="RH_hill">
+      <inherit name="editor_object" />
+      <scenery />
+      <look>It's a dirt-covered hill. Nothing special. (You can't go that way yet. This is just the first prototype.)</look>
+      <alias>hill</alias>
+    </object>
+    <exit alias="south" to="RH_gateway">
+      <inherit name="southdirection" />
+      <runscript type="boolean">false</runscript>
+      <script type="script">
+      </script>
+    </exit>
+  </object>
+</asl>
