@@ -73,7 +73,7 @@
         msg ("<br/>Welcome, Adventurer!")
         SetObjectFlagOn (player, "RH_gateway_visited")
       }
-      else if (not player.RH_came_from = RH_First_test_room) {
+      else if (player.currentcommand = "travel") {
         msg ("<br/>Welcome back, Adventurer!")
         // SetObjectFlagOn (player, "RH_welcomed_back")
       }
