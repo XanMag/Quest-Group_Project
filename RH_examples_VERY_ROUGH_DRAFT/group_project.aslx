@@ -118,12 +118,12 @@
         <value>farmer</value>
       </RH_topics>
       <speak type="script">
-        // msg ("\"Heya, there!\" booms the farmer. \"I know about hoes, but that's pretty much it!\"")
-        game.askaboutobject = RH_dirt_farmer
-        ShowMenu ("What you like to ask the farmer about?", RH_dirt_farmer.RH_topics, true) {
-          if (not result = null) {
-            DoAskTell (game.askaboutobject, result, "ask", "askdefault", "DefaultAsk")
-          }
+        msg ("\"Heya, there!\" booms the farmer. \"I know about hoes, but that's pretty much it!\"")
+        //game.askaboutobject = RH_dirt_farmer
+        //ShowMenu ("What you like to ask the farmer about?", RH_dirt_farmer.RH_topics, true) {
+          //if (not result = null) {
+         //   DoAskTell (game.askaboutobject, result, "ask", "askdefault", "DefaultAsk")
+         // }
         }
       </speak>
       <ask type="scriptdictionary">
