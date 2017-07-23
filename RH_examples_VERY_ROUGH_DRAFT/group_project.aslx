@@ -104,6 +104,9 @@
         <item key="dirt">
           msg ("\"I don't know what I could tell ya' about dirt that ya' wouldn't already know,\" shrugs the farmer.")
         </item>
+        <item key="gateway">
+          msg ("\"I don't know what I could tell ya' about that ya' wouldn't already know,\" shrugs the farmer. "It appears to be a way to travel betwen worlds or dimensions, or whatever you wanna call 'em."")
+        </item>
         <item key="corporations">
           msg ("\"They'll ruin me even worse if I tell ya' any particulars,\" says the farmer.")
         </item>
