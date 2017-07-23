@@ -12,4 +12,7 @@ Feel free to contribute however you please!
 |-|-|
 |Genre|Undecided|
 |Hub description| Undecided |
+|RPG?|Undecided|
+|Magic?|Yes. We are learning magic and blow ourself up I think...|
+|Hyperlinks & Panes|No hyperlinks or panes|
 |more| coming soon|
