@@ -35,7 +35,7 @@
   </function>
 
   <function name="HubEnterScript">
-    msg ("So this is the hub...")
+    msg ("So this is the hub...<br/>Enter TRAVEL to choose a destination.")
   </function>
 
   <function name="StartMeElsewhere" parameters="obj, roomname">
