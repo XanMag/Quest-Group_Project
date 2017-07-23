@@ -23,6 +23,7 @@
     <start type="script">
       StartScript
     </start>
+    <appendobjectdescription />
   </game>
   <object name="hub">
     <inherit name="editor_room" />
@@ -63,12 +64,6 @@
       else {
         msg ("<br/>(This is not the full version!)<br/>")
       }
-      msg ("This is the gateway from my dimension to the main hub.<br/><br/>Enter TRAVEL to go the hub or NORTH to enter my dimension.")
-    ]]></description>
-    <attr name="_initialise_" type="script">
-      AddToHubGateway (this)
-    </attr>
-    <enter type="script"><![CDATA[
       if (not GetBoolean(player, "RH_gateway_visited")) {
         msg ("<br/>Welcome, Adventurer!")
         SetObjectFlagOn (player, "RH_gateway_visited")
@@ -77,9 +72,24 @@
         msg ("<br/>Welcome back, Adventurer!")
         // SetObjectFlagOn (player, "RH_welcomed_back")
       }
+      msg ("<br/>This is the gateway from my dimension to the main hub.<br/><br/>Enter TRAVEL to go the hub or NORTH to enter my dimension.<br/>")
+    ]]></description>
+    <attr name="_initialise_" type="script">
+      AddToHubGateway (this)
+    </attr>
+    <enter type="script"><![CDATA[
+      // if (not GetBoolean(player, "RH_gateway_visited")) {
+        // msg ("<br/>Welcome, Adventurer!")
+        // SetObjectFlagOn (player, "RH_gateway_visited")
+        // }
+      // else if (player.currentcommand = "travel") {
+        // msg ("<br/>Welcome back, Adventurer!")
+        // // SetObjectFlagOn (player, "RH_welcomed_back")
+        // }
     ]]></enter>
     <beforeenter type="script">
     </beforeenter>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
     <exit alias="north" to="RH_First_test_room">
       <inherit name="northdirection" />
       <runscript />
@@ -87,6 +97,7 @@
         player.RH_came_from = player.parent
         MoveObject (player, RH_First_test_room)
       </script>
+      <scenery />
     </exit>
   </object>
   <verb>
@@ -97,7 +108,7 @@
   <object name="RH_First_test_room">
     <inherit name="editor_room" />
     <alias>Dirt Farm</alias>
-    <description><![CDATA[<br/>The landscape consists solely of dirt, as far as the eye can see in any given direction.<br/>]]></description>
+    <description><![CDATA[<br/>The landscape consists solely of dirt, as far as the eye can see in any given direction.<br/><br/>A farmer stands idly by, seemingly doing nothing besides admiring his hoe.<br/><br/>You can go SOUTH to the first room or IN to enter The Barn.<br/>]]></description>
     <usedefaultprefix type="boolean">false</usedefaultprefix>
     <object name="RH_dirt_farmer">
       <inherit name="editor_object" />
@@ -119,12 +130,12 @@
       </RH_topics>
       <speak type="script">
         msg ("\"Heya, there!\" booms the farmer. \"I know about hoes, but that's pretty much it!\"")
-        //game.askaboutobject = RH_dirt_farmer
-        //ShowMenu ("What you like to ask the farmer about?", RH_dirt_farmer.RH_topics, true) {
-          //if (not result = null) {
-         //   DoAskTell (game.askaboutobject, result, "ask", "askdefault", "DefaultAsk")
-         // }
-        }
+        // game.askaboutobject = RH_dirt_farmer
+        // ShowMenu ("What you like to ask the farmer about?", RH_dirt_farmer.RH_topics, true) {
+          // if (not result = null) {
+            // DoAskTell (game.askaboutobject, result, "ask", "askdefault", "DefaultAsk")
+            // }
+          // }
       </speak>
       <ask type="scriptdictionary">
         <item key="ho hoe hoes hos"><![CDATA[
@@ -152,7 +163,7 @@
         <item key="food vegetation vegetables crops">
           msg ("\"Ain't none!\" the farmer explodes. \"Between the environmentality of the situation and the Mongols, it's all gone!\"")
         </item>
-        <item key="pouch">
+        <item key="pouch feller fellow mister">
           msg ("\"Old boy, called himself 'Mister', came through here a while back,\" the farmer says, a twinkle in his eye. \"Had a pouch with him. Did somethin' to it so that everything got put into it shows up in this barn I got over the hill. Said he was goin' back before the Industrial Revolution and sendin' back some REAL food! Stuff from before all them poisons they designed for warfare started getting sprayed on our crops!\" ")
         </item>
         <item key="game">
@@ -162,11 +173,13 @@
           msg ("\"I'm alright, I reckon,\" shrugs the farmer. \"All things considered.\"")
         </item>
       </ask>
+      <scenery />
+      <inroomdescription type="string"></inroomdescription>
     </object>
     <object name="RH_hoe">
       <inherit name="editor_object" />
       <alias>hoe</alias>
-      <scenery type="boolean">false</scenery>
+      <scenery />
       <alt type="stringlist">
         <value>ho</value>
       </alt>
@@ -213,6 +226,7 @@
         player.RH_came_from = player.parent
         MoveObject (player, RH_gateway)
       </script>
+      <scenery />
     </exit>
     <exit alias="in" to="RH_barn">
       <inherit name="indirection" />
@@ -221,6 +235,7 @@
         player.RH_came_from = player.parent
         MoveObject (player, RH_barn)
       </script>
+      <scenery />
     </exit>
   </object>
   <object name="RH_barn">
@@ -235,6 +250,7 @@
         player.RH_came_from = player.parent
         MoveObject (player, RH_First_test_room)
       </script>
+      <scenery />
     </exit>
   </object>
 </asl>
