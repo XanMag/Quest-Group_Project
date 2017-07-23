@@ -20,20 +20,14 @@
     <showhealth type="boolean">false</showhealth>
     <showmoney type="boolean">false</showmoney>
     <enablehyperlinks type="boolean">false</enablehyperlinks>
-    <start type="script"><![CDATA[
+    <start type="script">
       StartScript
-      if (Combined()) {
-        msg ("This is the full version!")
-      }
-      else {
-        msg ("<br/>(This is not the full version!)<br/>")
-      }
-    ]]></start>
+    </start>
   </game>
   <object name="hub">
     <inherit name="editor_room" />
     <attr name="feature_startscript" type="boolean">false</attr>
-    <description><![CDATA[<br/>(Enter TRAVEL to choose a destination.)<br/>]]></description>
+    <description />
     <enter type="script">
       HubEnterScript
     </enter>
@@ -55,20 +49,44 @@
           msg (TravelToHub.travelmsg)
           player.parent = GetObject(result)
         }
-        // TODO Add script to search through objects carried by the player, and add the RH_carrying_on_dimension_exit Boolean to each
       </script>
     </command>
   </object>
   <object name="RH_gateway">
     <attr name="feature_startscript" type="boolean">false</attr>
     <gateway />
-    <alias>Richard Headkid's Lair (this name is a placeholder)</alias>
-    <description><![CDATA[<br/>This is the gateway between my game world and the main hub.<br/><br/>(I'd like to see someone else's hub description, and try to make mine similar.)<br/><br/>You can TRAVEL to a hub or enter this world to the NORTH.]]></description>
+    <alias>Richard Headkid's Dimension (this name is a placeholder)</alias>
+    <description type="script"><![CDATA[
+      if (Combined()) {
+        msg ("<br/>(This is the full version!)")
+      }
+      else {
+        msg ("<br/>(This is not the full version!)<br/>")
+      }
+      msg ("This is the gateway from my dimension to the main hub.<br/><br/>Enter TRAVEL to go the hub or NORTH to enter my dimension.")
+    ]]></description>
     <attr name="_initialise_" type="script">
       AddToHubGateway (this)
     </attr>
+    <enter type="script"><![CDATA[
+      if (not GetBoolean(player, "RH_gateway_visited")) {
+        msg ("<br/>Welcome, Adventurer!")
+        SetObjectFlagOn (player, "RH_gateway_visited")
+      }
+      else if (not player.RH_came_from = RH_First_test_room) {
+        msg ("<br/>Welcome back, Adventurer!")
+        // SetObjectFlagOn (player, "RH_welcomed_back")
+      }
+    ]]></enter>
+    <beforeenter type="script">
+    </beforeenter>
     <exit alias="north" to="RH_First_test_room">
       <inherit name="northdirection" />
+      <runscript />
+      <script type="script">
+        player.RH_came_from = player.parent
+        MoveObject (player, RH_First_test_room)
+      </script>
     </exit>
   </object>
   <verb>
@@ -87,15 +105,33 @@
       <alias>Dirt Farmer</alias>
       <look><![CDATA[He is donning some raggedy overalls, which are, of course, covered in dirt. {if RH_hoe.parent=RH_dirt_farmer:<br/><br/>He's also wielding a hoe.}]]></look>
       <usedefaultprefix />
+      <RH_topics type="stringlist">
+        <value>dirt</value>
+        <value>hoe</value>
+        <value>dirt</value>
+        <value>gateway</value>
+        <value>corparations</value>
+        <value>pouch</value>
+        <value>mongols</value>
+        <value>food</value>
+        <value>game</value>
+        <value>farmer</value>
+      </RH_topics>
       <speak type="script">
-        msg ("\"Heya, there!\" booms the farmer. \"I know about hoes, but that's pretty much it!\"")
+        // msg ("\"Heya, there!\" booms the farmer. \"I know about hoes, but that's pretty much it!\"")
+        game.askaboutobject = RH_dirt_farmer
+        ShowMenu ("What you like to ask the farmer about?", RH_dirt_farmer.RH_topics, true) {
+          if (not result = null) {
+            DoAskTell (game.askaboutobject, result, "ask", "askdefault", "DefaultAsk")
+          }
+        }
       </speak>
       <ask type="scriptdictionary">
         <item key="ho hoe hoes hos"><![CDATA[
-          if (not GetBoolean(RH_hoe, "handled")) {
+          if (not GetBoolean(RH_hoe, "RH_handled")) {
             msg ("\"Hell, I got hoes in different area codes, if ya' know what I mean!\" The dirt farmer shoots you a sly grin, giving his hoe a nice pat.<br/><br/>\"Here, take this one! I ain't got nothin' to do with it no more. Not after them corporations fouled up the whole works! Their 'techniques' rendered this whole area totally lifeless, besides me, that is.<br/><br/>\"THEN,\" he continues, \"the Mongols came through and plundered up all the food I had stored up in my barn.<br/><br/>\"Good thing that feller came by with that pouch. It'll provide a way to get some food here!\"")
             MoveObject (RH_hoe, player)
-            SetObjectFlagOn (RH_hoe, "handled")
+            SetObjectFlagOn (RH_hoe, "RH_handled")
           }
           else {
             msg ("\"Hell, I got hoes in different area codes, if ya' know what I mean!\" The dirt farmer shoots you a sly grin.")
@@ -104,10 +140,10 @@
         <item key="dirt">
           msg ("\"I don't know what I could tell ya' about dirt that ya' wouldn't already know,\" shrugs the farmer.")
         </item>
-        <item key="gateway">
-          msg ("\"I don't know what I could tell ya' about that ya' wouldn't already know,\" shrugs the farmer. "It appears to be a way to travel betwen worlds or dimensions, or whatever you wanna call 'em."")
+        <item key="gateway hub">
+          msg ("\"I don't know what I could tell ya' about that ya' wouldn't already know,\" shrugs the farmer. \"It appears to be a way to travel between worlds or dimensions, or whatever you wanna call 'em.\"")
         </item>
-        <item key="corporations">
+        <item key="corporations companies corporate">
           msg ("\"They'll ruin me even worse if I tell ya' any particulars,\" says the farmer.")
         </item>
         <item key="mongols">
@@ -137,14 +173,22 @@
       <look>It's a nice-looking hoe.</look>
       <feature_usegive />
       <feature_startscript />
+      <take />
       <use type="script">
         msg ("You hoe around.")
       </use>
       <attr name="_initialise_" type="script">
+        if (HasAttribute(RH_hoe, "RH_left_in_room")) {
+          StartMeElsewhere (this, "hoe.RH_left_in_room")
+        }
       </attr>
+      <ondrop type="script">
+        RH_hoe.RH_left_in_room = RH_hoe.parent
+        msg ("Dropped in " + RH_hoe.RH_left_in_room + ".")
+      </ondrop>
       <selfuseon type="scriptdictionary">
         <item key="RH_dirt">
-          msg ("You dig in the dirt for a bit. It makes no difference at all.")
+          msg ("You dig in the dirt for a bit. You find nothing.")
         </item>
       </selfuseon>
     </object>
@@ -164,8 +208,32 @@
     </object>
     <exit alias="south" to="RH_gateway">
       <inherit name="southdirection" />
-      <runscript type="boolean">false</runscript>
+      <runscript />
       <script type="script">
+        player.RH_came_from = player.parent
+        MoveObject (player, RH_gateway)
+      </script>
+    </exit>
+    <exit alias="in" to="RH_barn">
+      <inherit name="indirection" />
+      <runscript />
+      <script type="script">
+        player.RH_came_from = player.parent
+        MoveObject (player, RH_barn)
+      </script>
+    </exit>
+  </object>
+  <object name="RH_barn">
+    <inherit name="editor_room" />
+    <alias>The Barn</alias>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <description>Nothing to see here yet.</description>
+    <exit alias="out" to="RH_First_test_room">
+      <inherit name="outdirection" />
+      <runscript />
+      <script type="script">
+        player.RH_came_from = player.parent
+        MoveObject (player, RH_First_test_room)
       </script>
     </exit>
   </object>
