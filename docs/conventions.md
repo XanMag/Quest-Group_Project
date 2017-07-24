@@ -39,6 +39,7 @@ race         String   Therace name in lower case, eg "human"
 
 Change log RH
 ---
+
 |Action taken|Notes|Date|
-|-|-|
+|--|-|-|
 |Added SHOWME command to library.|For testing purposes; displays ALL CHILD ITEMS of current room|07/23/2017|
