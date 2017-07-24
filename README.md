@@ -5,14 +5,4 @@ Everything is currently being set up.
 Feel free to contribute however you please!
 
 ---
-
-**Main things to decide upon:**
-
-|Topic| Decision |
-|-|-|
-|Genre|Undecided|
-|Hub description| Undecided |
-|RPG?|Undecided|
-|Magic?|Yes. We are learning magic and blow ourself up I think...|
-|Hyperlinks & Panes|No hyperlinks or panes|
-|more| coming soon|
+[Go to the TODO Page](https://github.com/rheadkid/Quest-Group_Project/wiki/1st-and-foremost "See the TODO list")
