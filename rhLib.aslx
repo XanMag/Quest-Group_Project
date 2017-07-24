@@ -1,0 +1,196 @@
+<library>
+  <object name="RH_gateway">
+    <attr name="feature_startscript" type="boolean">false</attr>
+    <gateway />
+    <alias>Richard Headkid's Dimension (this name is a placeholder)</alias>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <description type="script"><![CDATA[
+      if (Combined()) {
+        msg ("<br/>(This is the full version!) ")
+      }
+      else {
+        msg ("<br/>(This is not the full version!)<br/>")
+      }
+      if (not GetBoolean(player, "RH_gateway_visited")) {
+        msg ("<br/>Welcome, Adventurer!")
+        SetObjectFlagOn (player, "RH_gateway_visited")
+      }
+      else if (player.currentcommand = "travel") {
+        msg ("<br/>Welcome back, Adventurer!")
+        // SetObjectFlagOn (player, "RH_welcomed_back")
+      }
+      msg ("<br/>This is the gateway from my dimension to the main hub.<br/><br/>Enter TRAVEL to go the hub or NORTH to enter my dimension.<br/>")
+    ]]></description>
+    <attr name="_initialise_" type="script">
+      AddToHubGateway (this)
+    </attr>
+    <enter type="script"><![CDATA[
+      // if (not GetBoolean(player, "RH_gateway_visited")) {
+        // msg ("<br/>Welcome, Adventurer!")
+        // SetObjectFlagOn (player, "RH_gateway_visited")
+        // }
+      // else if (player.currentcommand = "travel") {
+        // msg ("<br/>Welcome back, Adventurer!")
+        // // SetObjectFlagOn (player, "RH_welcomed_back")
+        // }
+    ]]></enter>
+    <beforeenter type="script">
+    </beforeenter>
+    <exit alias="north" to="RH_First_test_room">
+      <inherit name="northdirection" />
+      <runscript />
+      <scenery />
+      <script type="script">
+        player.RH_came_from = player.parent
+        MoveObject (player, RH_First_test_room)
+      </script>
+    </exit>
+  </object>
+  <object name="RH_First_test_room">
+    <inherit name="editor_room" />
+    <alias>Dirt Farm</alias>
+    <description><![CDATA[<br/>The landscape consists solely of dirt, as far as the eye can see in any given direction.<br/><br/>A farmer stands idly by, seemingly doing nothing besides admiring his hoe.<br/><br/>You can go SOUTH to the first room or IN to enter The Barn.<br/>]]></description>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <object name="RH_dirt_farmer">
+      <inherit name="editor_object" />
+      <inherit name="namedmale" />
+      <alias>Dirt Farmer</alias>
+      <look><![CDATA[He is donning some raggedy overalls, which are, of course, covered in dirt. {if RH_hoe.parent=RH_dirt_farmer:<br/><br/>He's also wielding a hoe.}]]></look>
+      <usedefaultprefix />
+      <RH_topics type="stringlist">
+        <value>dirt</value>
+        <value>hoe</value>
+        <value>dirt</value>
+        <value>gateway</value>
+        <value>corparations</value>
+        <value>pouch</value>
+        <value>mongols</value>
+        <value>food</value>
+        <value>game</value>
+        <value>farmer</value>
+      </RH_topics>
+      <scenery />
+      <inroomdescription type="string"></inroomdescription>
+      <speak type="script">
+        msg ("\"Heya, there!\" booms the farmer. \"I know about hoes, but that's pretty much it!\"")
+        // game.askaboutobject = RH_dirt_farmer
+        // ShowMenu ("What you like to ask the farmer about?", RH_dirt_farmer.RH_topics, true) {
+          // if (not result = null) {
+            // DoAskTell (game.askaboutobject, result, "ask", "askdefault", "DefaultAsk")
+            // }
+          // }
+      </speak>
+      <ask type="scriptdictionary">
+        <item key="ho hoe hoes hos"><![CDATA[
+          if (not GetBoolean(RH_hoe, "hasbeenmoved")) {
+            msg ("\"Hell, I got hoes in different area codes, if ya' know what I mean!\" The dirt farmer shoots you a sly grin, giving his hoe a nice pat.<br/><br/>\"Here, take this one! I ain't got nothin' to do with it no more. Not after them corporations fouled up the whole works! Their 'techniques' rendered this whole area totally lifeless, besides me, that is.<br/><br/>\"THEN,\" he continues, \"the Mongols came through and plundered up all the food I had stored up in my barn.<br/><br/>\"Good thing that feller came by with that pouch. It'll provide a way to get some food here!\"")
+            MoveObject (RH_hoe, player)
+          }
+          else {
+            msg ("\"Hell, I got hoes in different area codes, if ya' know what I mean!\" The dirt farmer shoots you a sly grin.")
+          }
+        ]]></item>
+        <item key="dirt">
+          msg ("\"I don't know what I could tell ya' about dirt that ya' wouldn't already know,\" shrugs the farmer.")
+        </item>
+        <item key="gateway hub">
+          msg ("\"I don't know what I could tell ya' about that ya' wouldn't already know,\" shrugs the farmer. \"It appears to be a way to travel between worlds or dimensions, or whatever you wanna call 'em.\"")
+        </item>
+        <item key="corporations companies corporate">
+          msg ("\"They'll ruin me even worse if I tell ya' any particulars,\" says the farmer.")
+        </item>
+        <item key="mongols">
+          msg ("\"Them boys are somethin' else,\" the farmer replies. \"I couldn't tell if they was good or bad, but they sure did ME wrong, I can tell you that!\"")
+        </item>
+        <item key="food vegetation vegetables crops">
+          msg ("\"Ain't none!\" the farmer explodes. \"Between the environmentality of the situation and the Mongols, it's all gone!\"")
+        </item>
+        <item key="pouch feller fellow mister">
+          msg ("\"Old boy, called himself 'Mister', came through here a while back,\" the farmer says, a twinkle in his eye. \"Had a pouch with him. Did somethin' to it so that everything got put into it shows up in this barn I got over the hill. Said he was goin' back before the Industrial Revolution and sendin' back some REAL food! Stuff from before all them poisons they designed for warfare started getting sprayed on our crops!\" ")
+        </item>
+        <item key="game">
+          msg ("\"I don't know yet,\" grumbles the farmer. \"This here's the first prototype I've seen, and it ain't written worth a damn!\"")
+        </item>
+        <item key="farmer him himself">
+          msg ("\"I'm alright, I reckon,\" shrugs the farmer. \"All things considered.\"")
+        </item>
+      </ask>
+    </object>
+    <object name="RH_hoe">
+      <inherit name="editor_object" />
+      <alias>hoe</alias>
+      <scenery />
+      <alt type="stringlist">
+        <value>ho</value>
+      </alt>
+      <look>It's a nice-looking hoe.</look>
+      <feature_usegive />
+      <feature_startscript />
+      <take />
+      <use type="script">
+        msg ("You hoe around.")
+      </use>
+      <attr name="_initialise_" type="script">
+        if (HasAttribute(RH_hoe, "RH_left_in_room")) {
+          StartMeElsewhere (this, "hoe.RH_left_in_room")
+        }
+      </attr>
+      <ondrop type="script">
+        RH_hoe.RH_left_in_room = RH_hoe.parent
+        msg ("Dropped in " + RH_hoe.RH_left_in_room + ".")
+      </ondrop>
+      <selfuseon type="scriptdictionary">
+        <item key="RH_dirt">
+          msg ("You dig in the dirt for a bit. You find nothing.")
+        </item>
+      </selfuseon>
+    </object>
+    <object name="RH_dirt">
+      <inherit name="editor_object" />
+      <scenery />
+      <look>You can't help looking at it. It's everywhere!</look>
+      <alias>dirt</alias>
+      <attr name="feature_usegive" type="boolean">false</attr>
+      <giveto type="scriptdictionary" />
+    </object>
+    <object name="RH_hill">
+      <inherit name="editor_object" />
+      <scenery />
+      <look>It's a dirt-covered hill. Nothing special. (You can't go that way yet. This is just the first prototype.)</look>
+      <alias>hill</alias>
+    </object>
+    <exit alias="south" to="RH_gateway">
+      <inherit name="southdirection" />
+      <runscript />
+      <scenery />
+      <script type="script">
+        player.RH_came_from = player.parent
+        MoveObject (player, RH_gateway)
+      </script>
+    </exit>
+    <exit alias="in" to="RH_barn">
+      <inherit name="indirection" />
+      <runscript />
+      <scenery />
+      <script type="script">
+        player.RH_came_from = player.parent
+        MoveObject (player, RH_barn)
+      </script>
+    </exit>
+  </object>
+  <object name="RH_barn">
+    <inherit name="editor_room" />
+    <alias>The Barn</alias>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <description>Nothing to see here yet.</description>
+    <exit alias="out" to="RH_First_test_room">
+      <inherit name="outdirection" />
+      <runscript />
+      <scenery />
+      <script type="script">
+        player.RH_came_from = player.parent
+        MoveObject (player, RH_First_test_room)
+      </script>
+    </exit>
+  </object>
+</library>
