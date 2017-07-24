@@ -38,8 +38,7 @@
   </function>
 
   <function name="DescribeHub">
-    msg ("This is the hub, the starting point of your adventure!")
-  </function>
+ msg ("So this is the hub...<br/>Enter TRAVEL to choose a destination.") //RH altered 07.23.2017  </function>
 
   <function name="StartScript">
     msg ("Welcome to...")
