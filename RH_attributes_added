@@ -6,7 +6,7 @@ RH
 RH_gateway_visited
 
 Use:
-player.RH_gateway_visited
+RH_gateway.RH_gateway_visited
 
 This tells me if you've been to my dimension the first time, for greeting messages and other funky stuff.
 
