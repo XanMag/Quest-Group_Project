@@ -5,19 +5,19 @@
     <alias>Richard Headkid's Dimension (this name is a placeholder)</alias>
     <usedefaultprefix type="boolean">false</usedefaultprefix>
     <description type="script"><![CDATA[
-      if (Combined()) {
+      if (game.combined) {
         msg ("<br/>(This is the full version!) ")
       }
       else {
         msg ("<br/>(This is not the full version!)<br/>")
       }
-      if (not GetBoolean(player, "RH_gateway_visited")) {
+      if (not GetBoolean(RH_gateway, "RH_gateway_visited")) {
         msg ("<br/>Welcome, Adventurer!")
-        SetObjectFlagOn (player, "RH_gateway_visited")
+        SetObjectFlagOn (RH_gateway, "RH_gateway_visited")
       }
       else if (player.currentcommand = "travel") {
         msg ("<br/>Welcome back, Adventurer!")
-        // SetObjectFlagOn (player, "RH_welcomed_back")
+        // SetObjectFlagOn (RH_gateway, "RH_welcomed_back")
       }
       msg ("<br/>This is the gateway from my dimension to the main hub.<br/><br/>Enter TRAVEL to go the hub or NORTH to enter my dimension.<br/>")
     ]]></description>
@@ -25,13 +25,13 @@
       AddToHubGateway (this)
     </attr>
     <enter type="script"><![CDATA[
-      // if (not GetBoolean(player, "RH_gateway_visited")) {
+      // if (not GetBoolean(RH_gateway, "RH_gateway_visited")) {
         // msg ("<br/>Welcome, Adventurer!")
-        // SetObjectFlagOn (player, "RH_gateway_visited")
+        // SetObjectFlagOn (RH_gateway, "RH_gateway_visited")
         // }
       // else if (player.currentcommand = "travel") {
         // msg ("<br/>Welcome back, Adventurer!")
-        // // SetObjectFlagOn (player, "RH_welcomed_back")
+        // // SetObjectFlagOn (RH_gateway, "RH_welcomed_back")
         // }
     ]]></enter>
     <beforeenter type="script">
@@ -85,6 +85,7 @@
           if (not GetBoolean(RH_hoe, "hasbeenmoved")) {
             msg ("\"Hell, I got hoes in different area codes, if ya' know what I mean!\" The dirt farmer shoots you a sly grin, giving his hoe a nice pat.<br/><br/>\"Here, take this one! I ain't got nothin' to do with it no more. Not after them corporations fouled up the whole works! Their 'techniques' rendered this whole area totally lifeless, besides me, that is.<br/><br/>\"THEN,\" he continues, \"the Mongols came through and plundered up all the food I had stored up in my barn.<br/><br/>\"Good thing that feller came by with that pouch. It'll provide a way to get some food here!\"")
             MoveObject (RH_hoe, player)
+			RH_hoe.scenery = false
           }
           else {
             msg ("\"Hell, I got hoes in different area codes, if ya' know what I mean!\" The dirt farmer shoots you a sly grin.")
