@@ -45,6 +45,31 @@ Change log RH
 |Added SHOWME command to library.|For testing purposes; displays ALL CHILD ITEMS of current room|07/23/2017|
 |Added line of text explaining you can enter TRAVEL in hub room script|To let us know what to do|07/23/2017|
 
+----
+These are the attributes I've added in so far. 
+RH
+07/24/2017
+
+---
+RH_gateway_visited
+
+Use:
+player.RH_gateway_visited
+
+This tells me if you've been to my dimension the first time, for greeting messages and other funky stuff.
+
+
+---
+RH_left_in_room
+
+USE:
+RH_hoe.RH_left_in_room
+
+This tells me where the hoe should be if you drop it in a room before leaving my dimension. It will be in that room upon your return.
+
+
+---
+
 
 ---
 RE: Display / Theme
